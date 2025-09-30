@@ -1,0 +1,16 @@
+<nwb-item-detail-header
+  [enableTracker]="enableTracker"
+  [enableInfoLink]="enableInfoLink"
+  [enableLink]="enableLink"
+  [disableContent]="square"
+/>
+@if (!square) {
+  <div class="flex flex-col gap-2 p-4 empty:hidden">
+    @if (components(); as components) {
+      @for (component of components; track $index) {
+        <ng-container [ngComponentOutlet]="component" />
+      }
+    }
+    <ng-content/>
+  </div>
+}

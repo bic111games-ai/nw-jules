@@ -1,0 +1,43 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": false,
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "paths": {
+      "~/*": ["apps/web/app/*"],
+      "@nw-data/generated": ["libs/nw-data/generated"],
+      "@nw-data/common": ["libs/nw-data/common"]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

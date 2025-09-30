@@ -1,0 +1,38 @@
+{
+  "asar": true,
+  "directories": {
+    "output": "release/"
+  },
+  "compression": "maximum",
+  "files": [
+    "dist/electron/**/*",
+    "dist/web-electron/browser/**/*",
+    "!dist/nw-data",
+    "!dist/server",
+    "!dist/web",
+    "!dist/web-cloud",
+    "!**/*.ts",
+    "!*.map",
+    "!package.json",
+    "!package-lock.json",
+    "!yarn.json",
+    "!*.gz",
+    "!*.zip"
+  ],
+  "extraResources": [],
+  "win": {
+    "icon": "dist/web-electron/browser/assets/icons",
+    "target": ["portable"]
+  },
+  "portable": {
+    "splashImage": "dist/web-electron/browser/assets/icons/electron.bmp"
+  },
+  "mac": {
+    "icon": "dist/web-electron/browser/assets/icons",
+    "target": ["dmg"]
+  },
+  "linux": {
+    "icon": "dist/web-electron/browser/assets/icons",
+    "target": ["AppImage"]
+  }
+}

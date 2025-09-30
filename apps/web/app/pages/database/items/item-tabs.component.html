@@ -1,0 +1,67 @@
+<ng-container *ngIf="vm$ | async; let vm">
+  <div class="tabs tabs-bordered flex-nowrap justify-start overflow-auto whitespace-nowrap scrollbar-hide">
+    <a
+      class="tab tab-active"
+      [class.tab-active]="vm.tabId === tab.id"
+      [routerLink]="[]"
+      [queryParams]="{ itemTab: tab.id }"
+      [queryParamsHandling]="'merge'"
+      *ngFor="let tab of vm.tabs"
+    >
+      {{ tab.label }}
+    </a>
+  </div>
+  <div class="flex flex-col gap-2 pt-2">
+    @switch (vm.tabId) {
+      @case ('effects') {
+        @for (id of vm.grantsEffects; track $index) {
+          <nwb-status-effect-detail [effectId]="id" class="bg-black" />
+        }
+      }
+      @case ('perks') {
+        @for (id of vm.resourcePerks; track $index) {
+          <nwb-perk-detail [perkId]="id" class="bg-black" />
+        }
+
+        <nwb-perk-bucket-detail-tabs
+          [perkBucketIds]="vm.perkBucketIds"
+          [itemId]="vm.entityId"
+          class="bg-base-300 rounded-b-md"
+        />
+      }
+      @case ('unlocks') {
+        <nwb-item-card [entityId]="vm.unlocksRecipe.ItemID" [enableInfoLink]="true" [enableLink]="true" />
+      }
+      @case ('recipes') {
+        @for (item of vm.recipes; track $index) {
+          <nwb-crafting-calculator [recipe]="item.recipe" class="bg-base-300 rounded-b-md" />
+        }
+      }
+      @case ('transmog') {
+        <nwb-appearance-detail [appearance]="vm.appearance" [parentItemId]="vm.entityId" />
+      }
+      @case ('craftable') {
+        <div
+          class="flex flex-col gap-2"
+          [nwbInfniteScroll]="vm.craftableRecipes"
+          [nwbInfniteScrollPerPage]="10"
+          #scroll="infiniteScroll"
+        >
+          @for (item of scroll.data$ | async; track $index) {
+            <nwb-item-detail [entityId]="item.itemId" class="rounded-md overflow-clip">
+              <nwb-item-detail-header [enableInfoLink]="true" [enableLink]="true" [size]="'xs'" />
+            </nwb-item-detail>
+          }
+          @if (scroll.canLoad$ | async) {
+            <button class="btn loading" nwbInfiniteScrollTrigger>loading</button>
+          }
+        </div>
+      }
+      @case ('loot') {
+        @for (tableId of vm.lootTableIds; track $index) {
+          <nwb-loot-graph [tableId]="tableId" [expand]="false" [showLocked]="true" [highlight]="recordId$ | async" />
+        }
+      }
+    }
+  </div>
+</ng-container>

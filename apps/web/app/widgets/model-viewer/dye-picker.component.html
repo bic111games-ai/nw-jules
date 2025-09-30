@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar class="ion-color ion-color-black rounded-t-md">
+    <ion-title>Dye Color Picker</ion-title>
+    <button type="button" slot="end" class="btn btn-ghost btn-circle mr-1" [nwbModalClose]>&times;</button>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-p-4">
+  <div class="flex flex-row gap-2 flex-wrap">
+    <button [tooltip]="'Clears current color'" class="btn btn-square btn-ghost" (click)="commit(null)">&times;</button>
+    @for (color of colors; track $index) {
+      <button
+        [tooltip]="tplTip"
+        [tooltipClass]="'p-2'"
+        class="btn btn-square"
+        [style.background-color]="color.Color"
+        (click)="commit(color)"
+      >
+        <ng-template #tplTip>
+          <div class="flex flex-col gap-1">
+            <h4 class="font-bold">{{ color.Name }} - {{ color.Category }}</h4>
+            <div class="flex flex-row gap-1">
+              <span
+                class="inline-block w-4 h-4 rounded-sm"
+                [style.background-color]="color.Color"
+                [style.opacity]="color.ColorAmount"
+              ></span>
+              <span>Color</span>
+            </div>
+            <div class="flex flex-row gap-1">
+              <span
+                class="inline-block w-4 h-4 rounded-sm"
+                [style.background-color]="color.SpecColor"
+                [style.opacity]="color.SpecAmount"
+              ></span>
+              <span>Tint</span>
+            </div>
+            <div class="grid grid-cols-2"></div>
+          </div>
+        </ng-template>
+      </button>
+    }
+  </div>
+</ion-content>

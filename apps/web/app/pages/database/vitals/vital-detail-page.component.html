@@ -1,0 +1,70 @@
+<div
+  class="overflow-clip relative"
+  [nwbScreenshotFrame]="vital()?.DisplayName | nwText"
+>
+  <nwb-vital-detail-header class="bg-base-300" [editableLevel]="true" />
+  @if (store.isVitalFromDungeon$ | async) {
+    <div class="absolute top-0 right-0 p-2 flex flex-row">
+      <button
+        class="btn btn-xs btn-square btn-ghost"
+        (click)="selectDifficulty(1)"
+        [tooltip]="'Mutation Difficulty 1'"
+        [tooltipPlacement]="'top-right'"
+      >
+        <img src="assets/icons/menu/expeditions.png" class="w-4 h-4" [class.opacity-50]="!(difficulty() >= 1)" />
+      </button>
+      <button
+        class="btn btn-xs btn-square btn-ghost"
+        (click)="selectDifficulty(2)"
+        [tooltip]="'Mutation Difficulty 2'"
+        [tooltipPlacement]="'top-right'"
+      >
+        <img src="assets/icons/menu/expeditions.png" class="w-4 h-4" [class.opacity-50]="!(difficulty() >= 2)" />
+      </button>
+      <button
+        class="btn btn-xs btn-square btn-ghost"
+        (click)="selectDifficulty(3)"
+        [tooltip]="'Mutation Difficulty 3'"
+        [tooltipPlacement]="'top-right'"
+      >
+        <img src="assets/icons/menu/expeditions.png" class="w-4 h-4" [class.opacity-50]="!(difficulty() >= 3)" />
+      </button>
+    </div>
+  }
+
+  <div class="flex tabs tabs-bordered flex-none justify-center bg-base-300">
+    <a class="tab flex-1" [class.tab-active]="tab() === 'stats'" (click)="selectTab('stats')"> Stats </a>
+    <a
+      class="tab flex-1"
+      [class.tab-active]="tab() === 'damage-table'"
+      (click)="selectTab('damage-table')"
+    >
+      Attacks
+    </a>
+    <a class="tab flex-1" [class.tab-active]="tab() === '3d-model'" (click)="selectTab('3d-model')">
+      3D
+    </a>
+  </div>
+  <div class="p-4 bg-base-300 space-y-4">
+    @if (tab() === 'stats') {
+      <nwb-vital-detail-stats />
+      <nwb-vital-detail-map (vitalClicked)="onPointClicked($event)" />
+      @if (lootTableId(); as tableId) {
+        <nwb-loot-context-editor [vitalId]="vitalId()" [vitalLevel]="vitalLevel()" [contLevel]="vitalLevel()" #editor />
+        <nwb-loot-graph
+          [tagsEditable]="true"
+          (addTagClicked)="editor.addTag($event)"
+          [tags]="editor.contextTags | async"
+          [tagValues]="editor.contextTagValues | async"
+          [tableId]="tableId"
+        />
+      }
+    }
+    @if (tab() === 'damage-table') {
+      <nwb-vital-detail-attacks />
+    }
+    @if (tab() === '3d-model') {
+      <nwb-vital-detail-models class="-m-4" />
+    }
+  </div>
+</div>

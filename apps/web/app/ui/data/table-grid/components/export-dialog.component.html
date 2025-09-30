@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-toolbar class="ion-color ion-color-black rounded-t-md">
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-p-4">
+  <div class="flex flex-col">
+    @if (!data) {
+      <div class="form-control w-full">
+        <label class="label cursor-pointer">
+          <span class="label-text">Export all columns</span>
+          <input type="checkbox" class="toggle toggle-primary" [disabled]="isLoading" [(ngModel)]="exportAllCols" />
+        </label>
+      </div>
+      <div class="form-control w-full">
+        <label class="label cursor-pointer">
+          <span class="label-text">Export all rows</span>
+          <input type="checkbox" class="toggle toggle-primary" [disabled]="isLoading" [(ngModel)]="exportAllRows" />
+        </label>
+      </div>
+      <div class="form-control w-full">
+        <label class="label cursor-pointer">
+          <span class="label-text">Export only selected</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary"
+            [disabled]="isLoading"
+            [(ngModel)]="exportOnlySelected"
+          />
+        </label>
+      </div>
+      <div class="form-control w-full">
+        <label class="label cursor-pointer">
+          <span class="label-text">Skip header</span>
+          <input type="checkbox" class="toggle toggle-primary" [disabled]="isLoading" [(ngModel)]="skipHeader" />
+        </label>
+      </div>
+      <div class="form-control w-full">
+        <label class="label cursor-pointer">
+          <span class="label-text">Suppress quotes</span>
+          <input type="checkbox" class="toggle toggle-primary" [disabled]="isLoading" [(ngModel)]="suppressQuotes" />
+        </label>
+      </div>
+      <div class="form-control w-full max-w-xs">
+        <label class="label">
+          <span class="label-text">Column separator</span>
+        </label>
+        <input type="text" class="input input-bordered" [disabled]="isLoading" [(ngModel)]="columnSeparator" />
+      </div>
+      <div class="alert alert-error" *ngIf="hasError">
+        <nwb-icon [icon]="iconError" class="w-6 h-6 self-start" />
+        <div class="w-full">
+          <div class="text-xs">Something went wrong.</div>
+        </div>
+      </div>
+    } @else {
+      <div class="form-control w-full max-w-xs">
+        <label class="label">
+          <span class="label-text">File size</span>
+        </label>
+        <input
+          type="text"
+          class="input input-bordered"
+          disabled
+          [ngModel]="(data.size / 1024 / 1024 | number) + ' MB'"
+        />
+      </div>
+      <div class="form-control w-full max-w-xs">
+        <label class="label">
+          <span class="label-text">File name</span>
+        </label>
+        <input type="text" class="input input-bordered" [disabled]="isLoading" [(ngModel)]="filename" />
+      </div>
+    }
+
+    <div class="alert alert-error" *ngIf="hasError">
+      <nwb-icon [icon]="iconError" class="w-6 h-6 self-start" />
+      <div class="w-full">
+        <div class="text-xs">Something went wrong.</div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="rounded-b-md">
+  <ion-toolbar class="ion-color ion-color-base-300">
+    <div slot="end" class="join px-1">
+      @if (data) {
+        <button class="join-item btn btn-ghost" (click)="copyData()">Copy to clipboard</button>
+        <button class="join-item btn btn-ghost text-primary" (click)="downloadData()">Download</button>
+      } @else {
+        <button class="join-item btn btn-ghost" (click)="close()">Cancel</button>
+        <button
+          class="join-item btn btn-ghost text-primary"
+          [disabled]="isLoading"
+          (click)="export()"
+          [class.loading]="isLoading"
+        >
+          Export
+        </button>
+      }
+    </div>
+  </ion-toolbar>
+</ion-footer>

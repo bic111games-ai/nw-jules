@@ -1,0 +1,29 @@
+<ion-header class="bg-base-300">
+  <ion-toolbar>
+    <ion-title>Damage Calculator</ion-title>
+
+    <div slot="end">
+      <div class="join pr-1">
+        <button class="join-item btn btn-square btn-ghost" [class.text-primary]="showLog" (click)="showLog = !showLog" [tooltip]="'Show calulations'">
+          <nwb-icon [icon]="iconLog" class="w-4 h-4" />
+        </button>
+        <button class="join-item btn btn-square btn-ghost" (click)="copyLink()" [tooltip]="'Copy link'">
+          <nwb-icon [icon]="iconLink" class="w-4 h-4" />
+        </button>
+        <button class="join-item btn btn-square btn-ghost" [nwbScreenshotBtn] [tooltip]="'Screenshot'"></button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="sm:ion-p-4">
+  <div class="max-w-5xl mx-auto">
+    <nwb-damage-calculator
+      class="bg-base-300 sm:rounded-lg"
+      standalone
+      [state]="initialState"
+      [showLog]="showLog"
+      [nwbScreenshotFrame]="'Damage Calculator'"
+      (stateChange)="handleStateChange($event)"
+    />
+  </div>
+</ion-content>

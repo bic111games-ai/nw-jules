@@ -1,0 +1,242 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "analytics": false
+  },
+  "version": 1,
+  "newProjectRoot": "apps",
+  "projects": {
+    "nw-buddy": {
+      "root": "apps/web",
+      "prefix": "nwb",
+      "sourceRoot": "apps/web",
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": "dist/web",
+            "externalDependencies": ["assets/*"],
+            "index": "apps/web/index.html",
+            "browser": "apps/web/main.ts",
+            "tsConfig": "apps/web/tsconfig.app.json",
+            "webWorkerTsConfig": "apps/web/tsconfig.worker.json",
+            "polyfills": ["apps/web/polyfills.ts", "zone.js"],
+            "assets": [
+              "apps/web/_routes.json",
+              "apps/web/favicon.ico",
+              "apps/web/robots.txt",
+              "apps/web/sitemap.txt",
+              "apps/web/embed.js",
+              "apps/web/assets",
+              "apps/web/version",
+              {
+                "glob": "**/*",
+                "ignore": [
+                  "*.gz",
+                  "*.zip"
+                ],
+                "input": "dist/nw-data/.current",
+                "output": "/nw-data/",
+                "followSymlinks": true
+              },
+              {
+                "glob": "**/*",
+                "input": "docs/media",
+                "output": "/media/"
+              },
+              {
+                "glob": "**/*",
+                "input": "docs/pages",
+                "output": "/pages/"
+              }
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "",
+                "./node_modules"
+              ]
+            },
+            "styles": [
+              "apps/web/style.scss"
+            ],
+            "inlineStyleLanguage": "scss",
+            "scripts": []
+          },
+          "configurations": {
+            "dev": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "apps/web/environments/environment.ts",
+                  "with": "apps/web/environments/environment.dev.ts"
+                },
+                {
+                  "replace": "apps/web/environments/env.ts",
+                  "with": "apps/web/environments/env.generated.ts"
+                }
+              ]
+            },
+            "web": {
+              "outputPath": "dist/web",
+              "outputHashing": "all",
+              "baseHref": "/",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web/environments/environment.ts",
+                  "with": "apps/web/environments/environment.web.ts"
+                },
+                {
+                  "replace": "apps/web/environments/env.ts",
+                  "with": "apps/web/environments/env.generated.ts"
+                }
+              ]
+            },
+            "capacitor": {
+              "outputPath": "dist/web-capacitor",
+              "optimization": true,
+              "outputHashing": "all",
+              "baseHref": "./",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "fileReplacements": [
+                {
+                  "replace": "apps/web/environments/environment.ts",
+                  "with": "apps/web/environments/environment.capacitor.ts"
+                },
+                {
+                  "replace": "apps/web/environments/env.ts",
+                  "with": "apps/web/environments/env.generated.ts"
+                }
+              ]
+            },
+            "electron": {
+              "outputPath": "dist/web-electron",
+              "optimization": true,
+              "outputHashing": "all",
+              "baseHref": "./",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "fileReplacements": [
+                {
+                  "replace": "apps/web/environments/environment.ts",
+                  "with": "apps/web/environments/environment.electron.ts"
+                },
+                {
+                  "replace": "apps/web/environments/env.ts",
+                  "with": "apps/web/environments/env.generated.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "dev": {
+              "buildTarget": "nw-buddy:build:dev"
+            },
+            "web": {
+              "buildTarget": "nw-buddy:build:web"
+            },
+            "production": {
+              "buildTarget": "nw-buddy:build:production"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "apps/web/test.ts",
+            "polyfills": "apps/web/polyfills.ts",
+            "tsConfig": "apps/web/tsconfig.spec.json",
+            "webWorkerTsConfig": "apps/web/tsconfig.worker.json",
+            "karmaConfig": "apps/web/karma.conf.js",
+            "scripts": [],
+            "include": ["**/*.spec.ts", "../../libs/**/*.spec.ts"],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "",
+                "./node_modules"
+              ]
+            },
+            "styles": [
+              "apps/web/style.scss"
+            ],
+            "inlineStyleLanguage": "scss",
+            "fileReplacements": [
+              {
+                "replace": "apps/web/environments/env.ts",
+                "with": "apps/web/environments/env.generated.ts"
+              }
+            ],
+            "assets": [
+              "apps/web/assets",
+              {
+                "glob": "**/*",
+                "ignore": [
+                  "*.gz",
+                  "*.zip"
+                ],
+                "input": "dist/nw-data",
+                "output": "/nw-data/"
+              }
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": "apps/storybook",
+            "browserTarget": "nw-buddy:build",
+            "port": 5200,
+            "compodoc": false,
+            "styles": [
+              "apps/web/style.scss"
+            ]
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": "apps/storybook",
+            "browserTarget": "nw-buddy:build",
+            "compodoc": false,
+            "styles": [
+              "apps/web/style.scss"
+            ],
+            "outputDir": "dist/web-storybook",
+            "quiet": true,
+            "enableProdMode": false
+          }
+        }
+      }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "nwb",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "nwb"
+    }
+  }
+}
